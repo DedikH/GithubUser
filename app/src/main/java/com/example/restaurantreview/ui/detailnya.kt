@@ -1,11 +1,10 @@
 package com.example.restaurantreview.ui
 
 import android.annotation.SuppressLint
-import android.content.ContentValues
-import android.database.Cursor
-import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.StringRes
@@ -42,7 +41,7 @@ class detailnya : AppCompatActivity() {
         setContentView(R.layout.activity_detailnya)
 
         var textView = findViewById(R.id.nickname) as TextView
-        var strLLogin  = intent.getStringExtra("Username")
+        var strLLogin = intent.getStringExtra("Username")
         var image = findViewById(R.id.imagedetail) as ImageView
 
         textView.setText(strLLogin)
@@ -60,31 +59,35 @@ class detailnya : AppCompatActivity() {
         }
         detailOnClick()
     }
-    private fun viewpager(){
-        var strLLogins  = intent.getStringExtra("Username")
+
+    private fun viewpager() {
+        var strLLogins = intent.getStringExtra("Username")
         val sectionsPagerAdapter = strLLogins?.let { SectionsPagerAdapter(this, it) }
         val viewPager: ViewPager2 = findViewById(R.id.view_pager)
         viewPager.adapter = sectionsPagerAdapter
         val tabs: TabLayout = findViewById(R.id.tabs)
-        TabLayoutMediator(tabs, viewPager) {tab, position ->
+        TabLayoutMediator(tabs, viewPager) { tab, position ->
             tab.text = resources.getString(TAB_TITLES[position])
         }.attach()
     }
 
-    private fun getDetailCount(strLLogin: String){
+    private fun getDetailCount(strLLogin: String) {
         var followersCount = findViewById(R.id.countFollowers) as TextView
         var followingCount = findViewById(R.id.countFollowing) as TextView
 
         val client = ApiConfig.getDetailApiServices().getUsersDetail(strLLogin)
+        showLoading(true)
         client.enqueue(object : Callback<ResponseDetail> {
-            override fun onResponse(call: Call<ResponseDetail>,
-                                    response: Response<ResponseDetail>
-            ){
+            override fun onResponse(
+                call: Call<ResponseDetail>,
+                response: Response<ResponseDetail>
+            ) {
                 if (response.isSuccessful) {
+                    showLoading(false)
                     val responseBody = response.body()
                     if (responseBody != null) {
-                         followersCount.setText(responseBody.followers.toString())
-                         followingCount.setText(responseBody.following.toString())
+                        followersCount.setText(responseBody.followers.toString())
+                        followingCount.setText(responseBody.following.toString())
                     }
                 }
             }
@@ -95,28 +98,35 @@ class detailnya : AppCompatActivity() {
         })
     }
 
-    private fun detailOnClick(){
+    @SuppressLint("SuspiciousIndentation")
+    private fun detailOnClick() {
         val btnfav = findViewById(R.id.btnfavorites) as FloatingActionButton
-        val btndel = findViewById(R.id.btndelete) as FloatingActionButton
         val db = DBHelper(this, null)
         val duplicate = db.readableDatabase
-        var strLLogin  = intent.getStringExtra("Username").toString()
-        var adddb =db.addUser(strLLogin)
-//        var test = false
-           btnfav.setOnClickListener {
-               db.addUser(strLLogin)
-               Toast.makeText(this, strLLogin + " Added to Favorite", Toast.LENGTH_LONG).show()
-               btnfav.setBackgroundResource(R.drawable.bookmark_added)
+        var strLLogin = intent.getStringExtra("Username").toString()
+        val bundle = intent.extras
+        val image_url = bundle!!.getString("imageUrl")
 
-           }
+        val duplicateData = db.getDuplicate(strLLogin)
 
-        btndel.setOnClickListener{
-            deletedata(strLLogin)
-            Toast.makeText(this, strLLogin + " Delete to Favorite", Toast.LENGTH_LONG).show()
+
+        var test = true
+
+        btnfav.setOnClickListener {
+            if(test == true){
+                if(duplicateData != null && duplicateData.moveToFirst()){
+                    deletedata(strLLogin)
+                    Toast.makeText(this, strLLogin + " Delete to Favorite", Toast.LENGTH_LONG).show()
+                    test = true
+                }else{
+                    db.addUser(strLLogin, image_url)
+                    Toast.makeText(this, strLLogin + " Added to Favorite", Toast.LENGTH_LONG).show()
+                    btnfav.setBackgroundResource(R.drawable.bookmark_added)
+                    test = false
+                }
+            }
         }
-    }
-
-    //            Toast.makeText(this, strLLogin + " added to database", Toast.LENGTH_LONG).show()
+}
 
     fun deletedata(username: String):Int {
         val db = DBHelper(this, null)
@@ -124,5 +134,14 @@ class detailnya : AppCompatActivity() {
         val USERNAME = "login"
         return dbdel.delete(DBHelper.TABLE_NAME, "$USERNAME=?", arrayOf(username))
 
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        val progressBar = findViewById(R.id.progressBardetail) as ProgressBar
+        if (isLoading) {
+            progressBar.visibility = View.VISIBLE
+        } else {
+            progressBar.visibility = View.GONE
+        }
     }
 }

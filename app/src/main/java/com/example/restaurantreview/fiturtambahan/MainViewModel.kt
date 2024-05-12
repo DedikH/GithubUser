@@ -13,6 +13,7 @@ class MainViewModel(private val pref: settingpreverences) : ViewModel() {
     fun saveThemeSetting(isDarkModeActive: Boolean){
         viewModelScope.launch{
             pref.saveThemeSetting(isDarkModeActive)
+
         }
     }
 }

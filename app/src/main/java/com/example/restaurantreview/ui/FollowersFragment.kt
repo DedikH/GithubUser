@@ -86,7 +86,7 @@ class FollowersFragment : Fragment() {
 
     @SuppressLint("SuspiciousIndentation")
     private fun showLoading(isLoading: Boolean) {
-        val loading = view?.findViewById<ProgressBar>(R.id.progressBar)
+        val loading = view?.findViewById<ProgressBar>(R.id.progressBarfollowers)
         if (isLoading) {
             loading?.visibility ?: View.VISIBLE
         } else {

@@ -22,12 +22,19 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.lifecycle.ViewModelProvider
+import com.example.restaurantreview.fiturtambahan.MainViewModel
+import com.example.restaurantreview.fiturtambahan.dataStore
+import com.example.restaurantreview.fiturtambahan.settingpreverences
+import com.example.restaurantreview.fiturtambahan.viewModelFactory
 
 
 class MainActivity : AppCompatActivity(), RVonclick {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var binding2: ItemReviewBinding
+    private lateinit var mainViewModel: MainViewModel
 
     companion object {
         const val TAG = "MainActivity"
@@ -60,6 +67,8 @@ class MainActivity : AppCompatActivity(), RVonclick {
         findUsers(LoginUsers)
         searching(LoginSearch)
         intentdetail()
+        getdataTheme()
+
     }
 
     private fun intentdetail(){
@@ -157,6 +166,20 @@ class MainActivity : AppCompatActivity(), RVonclick {
             bundle.putString("imageUrl",username.avatarUrl)
             intents.putExtras(bundle)
             startActivity(intents)
+    }
+
+    private fun getdataTheme(){
+            mainViewModel = ViewModelProvider(this, viewModelFactory(settingpreverences.getInstance(application.dataStore))).get(
+                MainViewModel::class.java
+            )
+
+            mainViewModel.getThemeSettings().observe(this) { isDarkModeActive ->
+                if (isDarkModeActive) {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                } else {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+        }
     }
 }
 

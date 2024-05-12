@@ -13,6 +13,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+
+
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -96,9 +98,10 @@
                         android:textSize="13dp"
                         android:text="Following" />
                 </LinearLayout>
-
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
+
+
 
 
         <LinearLayout
@@ -114,15 +117,13 @@
                 android:clickable="true"
                 android:layout_marginRight="20dp"
                 app:srcCompat="@drawable/add" />
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/btndelete"
+            <ProgressBar
+                android:id="@+id/progressBardetail"
+                style="?android:attr/progressBarStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="20dp"
-                android:clickable="true"
-                android:layout_marginRight="20dp"
-                app:srcCompat="@drawable/bookmark_remove" />
+                android:visibility="gone"
+                tools:visibility="visible" />
         </LinearLayout>
 
     </LinearLayout>
@@ -131,8 +132,9 @@
         android:id="@+id/tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/actionBarDivider"
-        app:tabTextColor="@android:color/background_dark"/>
+        android:background="?attr/actionBarDivider"/>
+<!--        app:tabTextColor="@android:color/background_dark"-->
+
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager"

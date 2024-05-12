@@ -76,7 +76,7 @@ private fun getListQuotes(FollowingUser : String) {
 
     @SuppressLint("SuspiciousIndentation")
     private fun showLoading(isLoading: Boolean) {
-    val loading = view?.findViewById<ProgressBar>(R.id.progressBar)
+    val loading = view?.findViewById<ProgressBar>(R.id.progressBarfollowing)
         if (isLoading) {
             loading?.visibility ?: View.VISIBLE
         } else {

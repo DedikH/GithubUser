@@ -1,6 +1,7 @@
 package com.example.restaurantreview.fiturtambahan
 
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.CompoundButton
@@ -11,6 +12,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.restaurantreview.R
 import com.example.restaurantreview.fiturtambahan.Favorites.Activity_Favorites
 import com.google.android.material.switchmaterial.SwitchMaterial
+import com.google.android.material.tabs.TabLayout
+import org.w3c.dom.Text
 
 class settingactivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,6 +36,7 @@ class settingactivity : AppCompatActivity() {
 
     private fun darkmode(){
         val switchTheme = findViewById<SwitchMaterial>(R.id.switch_theme)
+        val tab = findViewById<TabLayout>(R.id.tabs)
 
         val pref = settingpreverences.getInstance(application.dataStore)
         val mainViewModel = ViewModelProvider(this, viewModelFactory(pref)).get(

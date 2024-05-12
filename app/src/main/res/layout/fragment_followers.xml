@@ -14,4 +14,12 @@
         android:overScrollMode="never"
         android:scrollbarSize="0dp"/>
 
+    <ProgressBar
+        android:id="@+id/progressBarfollowers"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_gravity="center"
+        tools:visibility="visible" />
 </FrameLayout>
